@@ -1,0 +1,10 @@
+{
+  "name": "nnergix-test",
+  "version": "1.0.0",
+  "description": "Desarrollar una aplicación que introduciendo una URL de una página web devuelva todos los links que aparecen en ella con un formato de salida opcional.",
+  "main": "index.js",
+  "scripts": {},
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
