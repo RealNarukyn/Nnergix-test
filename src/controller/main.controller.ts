@@ -9,7 +9,7 @@ export default class MainController {
   };
 
   static link = async (req: Request, res: Response) => {
-    const url = "https://coinmarketcap.com/";
+    const { url } = req.body;
     const pageResponse = await axios(url);
 
     const links: LinkObj[] = getLinkObjects(pageResponse);
