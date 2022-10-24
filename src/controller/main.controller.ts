@@ -1,7 +1,9 @@
 import axios, { AxiosResponse } from "axios";
 import { Request, Response } from "express";
-import { LinkObj } from "../types/types";
 import cheerio from "cheerio";
+import { Link } from "../types/types";
+import { LinkReqModel } from "../model/linkReq.model";
+import { DbController } from "./db.controller";
 
 export default class MainController {
   static index = (req: Request, res: Response) => {
@@ -10,22 +12,33 @@ export default class MainController {
 
   static link = async (req: Request, res: Response) => {
     const { url } = req.body;
-    const pageResponse = await axios(url);
+    if (!url) {
+      return res.status(400).json({ error: "Invalid url..." });
+    }
 
-    const links: LinkObj[] = getLinkObjects(pageResponse);
+    const pageResponse = await axios(url);
+    const links: Link[] = getLinkects(pageResponse);
+
+    const LinkReq = new LinkReqModel({ url, links });
+    await LinkReq.save();
 
     res.status(200).json(links);
   };
+
+  static clearCollections = async (req: Request, res: Response) => {
+    await DbController.clearDB();
+    res.status(200).json({ msg: "Collections cleared successfully ✨" });
+  };
 }
 
-const getLinkObjects = (axiosResponse: AxiosResponse<any, any>): LinkObj[] => {
+const getLinkects = (axiosResponse: AxiosResponse<any, any>): Link[] => {
   // load content to cheerio
   const $ = cheerio.load(axiosResponse.data);
   // this is a mass object, not an array
-  const linkObjects = $("a");
+  const Linkects = $("a");
 
-  const links: LinkObj[] = [];
-  linkObjects.each((index, element) => {
+  const links: Link[] = [];
+  Linkects.each((index, element) => {
     // Collect the "href" and "title" of each link and add them to an array
     links.push({
       text: $(element).text(), // get the text
@@ -33,5 +46,5 @@ const getLinkObjects = (axiosResponse: AxiosResponse<any, any>): LinkObj[] => {
     });
   });
 
-  return links.filter((e: LinkObj) => e.href !== "" && e.href !== undefined);
+  return links.filter((e: Link) => e.href !== "" && e.href !== undefined);
 };

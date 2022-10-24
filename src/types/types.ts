@@ -1,4 +1,4 @@
-export type LinkObj = {
+export type Link = {
   text: string;
   href: string | undefined;
 };
