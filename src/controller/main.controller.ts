@@ -1,9 +1,8 @@
-import axios, { AxiosResponse } from "axios";
 import { Request, Response } from "express";
-import cheerio from "cheerio";
 import { Link } from "../types/types";
 import { LinkReqModel } from "../model/linkReq.model";
 import { DbController } from "./db.controller";
+import { getLinks } from "../utils";
 
 export default class MainController {
   static index = (req: Request, res: Response) => {
@@ -16,8 +15,7 @@ export default class MainController {
       return res.status(400).json({ error: "Invalid url..." });
     }
 
-    const pageResponse = await axios(url);
-    const links: Link[] = getLinkects(pageResponse);
+    const links: Link[] = await getLinks(url);
 
     const LinkReq = new LinkReqModel({ url, links });
     await LinkReq.save();
@@ -25,26 +23,18 @@ export default class MainController {
     res.status(200).json(links);
   };
 
+  static linkCmd = async (url: string): Promise<number> => {
+    if (!url) return 1;
+    const links: Link[] = await getLinks(url);
+
+    const LinkReq = new LinkReqModel({ url, links });
+    await LinkReq.save();
+
+    return 0;
+  };
+
   static clearCollections = async (req: Request, res: Response) => {
     await DbController.clearDB();
     res.status(200).json({ msg: "Collections cleared successfully ✨" });
   };
 }
-
-const getLinkects = (axiosResponse: AxiosResponse<any, any>): Link[] => {
-  // load content to cheerio
-  const $ = cheerio.load(axiosResponse.data);
-  // this is a mass object, not an array
-  const Linkects = $("a");
-
-  const links: Link[] = [];
-  Linkects.each((index, element) => {
-    // Collect the "href" and "title" of each link and add them to an array
-    links.push({
-      text: $(element).text(), // get the text
-      href: $(element).attr("href"), // get the href attribute
-    });
-  });
-
-  return links.filter((e: Link) => e.href !== "" && e.href !== undefined);
-};
