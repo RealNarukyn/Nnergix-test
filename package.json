@@ -4,7 +4,9 @@
   "description": "Desarrollar una aplicación que introduciendo una URL de una página web devuelva todos los links que aparecen en ella con un formato de salida opcional.",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon --watch './**/*.ts' --exec 'ts-node' ./src/server.ts",
+    "start": "node ./build/src/server.js",
+    "build": "tsc -p .",
+    "dev": "nodemon ./src/server.ts",
     "test": "jest --testEnvironment=node --runInBand ./tests"
   },
   "keywords": [],

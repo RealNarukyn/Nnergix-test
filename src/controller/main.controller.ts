@@ -7,7 +7,7 @@ import { DbController } from "./db.controller";
 
 export default class MainController {
   static index = (req: Request, res: Response) => {
-    res.status(200).send("Hello World!");
+    res.status(200).send("<marquee>Server Up!</marquee>");
   };
 
   static link = async (req: Request, res: Response) => {

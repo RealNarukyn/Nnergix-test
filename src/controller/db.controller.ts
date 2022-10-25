@@ -1,9 +1,11 @@
 import mongoose from "mongoose";
 import { CONF } from "../config";
 
+const DB_URL = CONF["DB_URL"] || "mongodb://localhost:27017/nnergix";
+
 export class DbController {
   static initDB = async () => {
-    await mongoose.connect(CONF["DB_URL"] as string);
+    await mongoose.connect(DB_URL);
     console.log("DataBase Connected ✨");
   };
 

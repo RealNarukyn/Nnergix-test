@@ -4,6 +4,7 @@ import { DbController } from "./controller/db.controller";
 
 (async () => await DbController.initDB())();
 
-app.listen(CONF.PORT, () =>
+const PORT = CONF.PORT || 3000;
+app.listen(PORT, () =>
   console.log(`Server running at: http://localhost:${CONF.PORT}`)
 );
