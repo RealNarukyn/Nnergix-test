@@ -9,6 +9,8 @@ services:
       - 3000:3000
     links: 
       - mongodb
+    environment:
+      - "DOCKER_URL=${DOCKER_URL}"
   mongodb:
     image: mongo:latest
     ports: 

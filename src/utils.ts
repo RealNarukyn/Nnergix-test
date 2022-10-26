@@ -25,3 +25,11 @@ export const getLinks = async (url: string): Promise<Link[]> => {
 
   return links.filter((e: Link) => e.href !== "" && e.href !== undefined);
 };
+
+export const filterURLs = (str: string): string[] => {
+  // Split every url separated by ','
+  const urlList = str.split(",");
+
+  // Check if they're valid urls
+  return urlList.filter((url) => regexURL.test(url));
+};
