@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 import { CONF } from "../config";
 
-const DB_URL = CONF["DB_URL"] || "mongodb://localhost:27017/nnergix";
+const DB_URL = CONF["DB_URL"];
 
 export class DbController {
   static initDB = async () => {
