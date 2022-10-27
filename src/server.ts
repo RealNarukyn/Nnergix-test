@@ -13,9 +13,10 @@ const initServer = async () => {
 
     // If they're valid url's ==> C O N T I N U E...
     if (urlList.length > 0) {
-      await Promise.all(
+      const links = await Promise.all(
         urlList.map(async (url) => await MainController.linkCmd(url))
       );
+      console.info(links);
 
       process.exit();
     }

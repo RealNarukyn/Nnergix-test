@@ -23,13 +23,15 @@ export default class MainController {
     res.status(200).json(links);
   };
 
-  static linkCmd = async (url: string) => {
-    if (!url) return;
+  static linkCmd = async (url: string):Promise<Link[]> => {
+    if (!url) return [];
 
     const links: Link[] = await getLinks(url);
 
     const LinkReq = new LinkReqModel({ url, links });
     await LinkReq.save();
+    
+    return links;
   };
 
   static clearCollections = async (req: Request, res: Response) => {
